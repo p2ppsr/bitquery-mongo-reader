@@ -24,6 +24,12 @@ app.use(cors())
 
 ;(async () => {
   // Connect to the MongoDB
+  console.log(`Bridge reader ${bridge.id} opening Mongo client:`, 
+    'buffer:', Buffer.from(MONGODB_READ_CREDS, 'base64').toString('utf8'),
+    'useNewUrlParser: true',
+    'useUnifiedTopology: true',
+    'serverApi: ServerApiVersion.v1'
+  )
   const mongoClient = new MongoClient(
     Buffer.from(MONGODB_READ_CREDS, 'base64').toString('utf8'),
     {
@@ -54,7 +60,9 @@ app.use(cors())
 
   // Query backend
   app.get(`/${bridge.id}/q/:query`, (req, res) => {
+    console.log(`Bridge reader ${bridge.id} query req:`, req)
     query({ db, req, res })
+    console.log(`Bridge reader ${bridge.id} query res:`, res)
   })
 
   // Socket frontend
@@ -67,7 +75,9 @@ app.use(cors())
 
   // Socket backend
   app.get(`/${bridge.id}/s/:query`, (req, res) => {
+    console.log(`Bridge reader ${bridge.id} socket req:`, req)
     socket({ db, req, res })
+    console.log(`Bridge reader ${bridge.id} socket res:`, res)
   })
 
   // Listen
