@@ -73,45 +73,53 @@ module.exports = (index) => {
           })
           // Query frontend
           app.get(`/${bridge.id}/query`, (req, res) => {
+            console.log(`frontend ${bridge.id}/query req:`, req)
             // Check if environment DEFAULT_QUERY is set, if so update normal defaults.query
-            console.log('process.env.DEFAULT_QUERY:', process.env.DEFAULT_QUERY)
+            console.log('frontend process.env.DEFAULT_QUERY:', process.env.DEFAULT_QUERY)
             if (process.env.DEFAULT_QUERY) {
               defaults.query = eval(JSON.stringify(process.env.DEFAULT_QUERY, null, 2))
-              console.log('defaults.query:eval(JSON(q))', defaults.query)
+              console.log('frontend defaults.query:eval(JSON(q))', defaults.query)
             }
-            console.log('defaults.query:', defaults.query)
+            console.log('frontend defaults.query:', defaults.query)
+            console.log(`frontend ${bridge.id}/query res:`, res)
             res.render('query', { bridge, defaultQuery: defaults.query })
           })
           app.get(`/${bridge.id}/query/:qs`, (req, res) => {
+            console.log(`${bridge.id}/query/:qs req:`, req)
             res.render('query', { bridge, defaultQuery: defaults.query })
+            console.log(`${bridge.id}/query/:qs res:`, res)
           })
           // Query backend
           app.get(`/${bridge.id}/q/:query`, (req, res) => {
-            console.log(`${bridge.id} query req:`, req)
+            console.log(`backend ${bridge.id}/q/query req:`, req)
             query({ db, req, res })
-            console.log(`${bridge.id} query res:`, res)
+            console.log(`backend ${bridge.id}/q/query res:`, res)
           })
           // Socket frontend
           app.get(`/${bridge.id}/socket`, (req, res) => {
+            console.log(`frontend ${bridge.id}/socket req:`, req)
             // Check if environment DEFAULT_SOCKET is set, if so update normal defaults.socket
-            console.log('process.env.DEFAULT_SOCKET:', process.env.DEFAULT_SOCKET)
+            console.log('frontend process.env.DEFAULT_SOCKET:', process.env.DEFAULT_SOCKET)
             if (process.env.DEFAULT_SOCKET) {
               defaults.socket = eval(JSON.stringify(process.env.DEFAULT_SOCKET, null, 2))
               console.log('defaults.socket:eval(JSON(s))', defaults.socket)
             }
             console.log('defaults.socket:', defaults.socket)
+            console.log(`frontend ${bridge.id}/socket res:`, res)
             res.render('socket', { bridge, defaultSocket: defaults.socket })
           })
           app.get(`/${bridge.id}/socket/:qs`, (req, res) => {
+            console.log(`frontend ${bridge.id}/socket:qs req:`, req)
             res.render('socket', { bridge, defaultSocket: defaults.socket })
+            console.log(`frontend ${bridge.id}/socket:qs res:`, res)
           })
           // Socket backend
           // *** this sould be socket *** ?
           // app.get(`/${bridge.id}/s/:socket`, (req, res) => {
           app.get(`/${bridge.id}/s/:query`, (req, res) => {
-            console.log(`${bridge.id} socket req:`, req)
+            console.log(`${bridge.id}/s/query socket req:`, req)
             socket({ db, req, res })
-            console.log(`${bridge.id} socket res:`, res)
+            console.log(`${bridge.id}/s/query socket res:`, res)
           })
           // Listen
           app.listen(PORT, () => {
