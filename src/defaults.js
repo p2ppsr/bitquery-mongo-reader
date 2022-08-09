@@ -4,8 +4,8 @@ module.exports = {
     q: {
       collection: 'users',
       find: {},
-      project: { userID: 1 },
-      limit: 10
+      //project: { _id: 1 },
+      //limit: 10
     }
   }, null, 2),
   socket: JSON.stringify({

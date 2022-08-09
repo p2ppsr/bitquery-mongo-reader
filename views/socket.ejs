@@ -250,14 +250,18 @@ var bitsocket = {
     var url = window.location.origin
     if (bitsocket.source) bitsocket.source.close();
     bitsocket.source = new EventSource(url+'/<%=bridge.id%>/s/'+b64)
+    console.log('bitsocket.source:', bitsocket.source)
     bitsocket.source.addEventListener('message', function(e) {
       var m = JSON.parse(e.data)
+      console.log('m.type:', m.type, 'should be = open, bitsocket.events.message:', bitsocket.events.message)
       if (bitsocket.events.message && m.type != "open") {
         bitsocket.events.message(m)
       }
     }, false)
     bitsocket.source.addEventListener('open', function(e) {
+      console.log('socket open')
       if (bitsocket.events.open) {
+        console.log('call bitsocket.events.open(', e, ')')
         bitsocket.events.open(e)
       }
     }, false)
@@ -334,15 +338,16 @@ var listen = function(q) {
   bitsocket.on("open", function(e) {
     document.querySelector(".loading i.spinner").classList.add("fa-spin")
     document.querySelector(".loading .msg").innerHTML = "listening..."
-    console.log(e)
+    console.log('open():e:', e)
   })
   bitsocket.on("close", function(e) {
     document.querySelector(".loading i.spinner").classList.remove("fa-spin")
     document.querySelector(".loading .msg").innerHTML = "stopped..."
-    console.log(e)
+    console.log('close():e:', e)
   })
   bitsocket.on("message", function(m) {
-    console.log(m)
+    console.log('message():m', m)
+    //console.log(m)
     var data = m.data;
     var type = m.type;
     var stream = document.querySelector(".stream");
@@ -380,7 +385,9 @@ var listen = function(q) {
   })
 }
 var updateUrl = function(query) {
+  console.log('updateUrl()')
   var endpoint = `${window.location.origin}/<%=bridge.id%>/s/`
+  console.log('updateUrl():endpoint:', endpoint)
   var base64 = btoa(query)
   var u = document.querySelector(".url");
   u.value = endpoint + base64;
@@ -461,6 +468,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
   listen(q)
 })
 var update = function(query) {
+  console.log('update')
   updateUrl(query)
   try {
     q = JSON.parse(query)
