@@ -6,7 +6,7 @@ The ```.env``` variables ```DEFAULT_QUERY``` and ```DEFAULT_SOCKET``` are used t
 
 Strings must be in strict full JSON format and follow [Bitquery](https://master--projectbabbage.netlify.app/docs/bridgeport/reference/bitquery) layout for query strings (see example below).
 
-The other .env variables are for internal use.
+The other ```.env``` variables are for internal use.
 
 Links are presented on the protocol web page [localhost:3103/1H48C3wg1YcgpT7Tx61PHzH8Lx6v5tVUKL/] for displaying both the Query UI and Socket UI.
 
