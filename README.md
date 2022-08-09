@@ -1,5 +1,5 @@
 # bitquery-mongo-reader
-Improved UMP(User Management Protocol) reader, to be used as a refernce work for additional Bridge readers.
+Improved UMP(User Management Protocol) reader, to be used as a reference work for additional Bridge readers.
 Please see doc/PROTOCOL.md for protocol description.
 
 The ```.env``` variables ```DEFAULT_QUERY``` and ```DEFAULT_SOCKET``` are used to specify the query strings a user wishes to start with their query and socket UI fields. These can be edited during a session.
@@ -7,6 +7,9 @@ The ```.env``` variables ```DEFAULT_QUERY``` and ```DEFAULT_SOCKET``` are used t
 Strings must be in strict full JSON format and follow Bitquery layout for query strings.
 
 The other .env variables are for internal use.
+
+Links are presented on the protocol web page localhost:3103/1H48C3wg1YcgpT7Tx61PHzH8Lx6v5tVUKL/ for displaying both the Query UI and Socket UI.
+nb: the trailing '/' character is required for the current implementation.
 
 ##Example ```.env``` file
 
