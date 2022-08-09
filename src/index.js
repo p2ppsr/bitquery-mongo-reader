@@ -92,17 +92,13 @@ module.exports = (index) => {
             query({ db, req, res })
             console.log(`${bridge.id} query res:`, res)
           })
-          // Check if environment DEFAULT_SOCKET is set, if so, update normal defaults.socket
-          if(process.env.DEFAULT_SOCKET) {
-            defaults.socket = 'JSON.stringify(' + process.env.DEFAULT_SOCKET + ', null, 2)'
-          }
           // Socket frontend
           app.get(`/${bridge.id}/socket`, (req, res) => {
             // Check if environment DEFAULT_SOCKET is set, if so update normal defaults.socket
             console.log('process.env.DEFAULT_SOCKET:', process.env.DEFAULT_SOCKET)
             if(process.env.DEFAULT_SOCKET) {
               defaults.socket = eval(JSON.stringify(process.env.DEFAULT_SOCKET, null, 2))
-              console.log('defaults.socket:eval(JSON(q))', defaults.socket)
+              console.log('defaults.socket:eval(JSON(s))', defaults.socket)
             }
             console.log('defaults.socket:', defaults.socket)
             res.render('socket', { bridge, defaultSocket: defaults.socket })
