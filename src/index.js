@@ -2,7 +2,7 @@ module.exports = (index) => {
   /**
    * Returns an implementation of addHeader with the given Storage Engine
    *
-   * @param {Object} params.index a copy of this function object to enable recursive calling 
+   * @param {Object} params.index a copy of this function object to enable recursive calling
    *
    * @returns null
    */
@@ -31,9 +31,9 @@ module.exports = (index) => {
   app.use(cors())
 
   // Initialise Mongo Client before call to connect to the MongoDB
-  let mongoClient = null
-  try{
-    console.log(`Bridge reader ${bridge.id} \nopening Mongo client:`, 
+  const mongoClient = null
+  try {
+    console.log(`Bridge reader ${bridge.id} \nopening Mongo client:`,
       '\nbuffer:', Buffer.from(MONGODB_READ_CREDS, 'base64').toString('utf8'),
       '\n{serverSelectionTimeoutMS: 600000,',
       'useNewUrlParser: true,',
@@ -47,12 +47,12 @@ module.exports = (index) => {
       {
         // *** Testing ***: Set to 6 secs to demonstrate recusive conection call
         serverSelectionTimeoutMS: 6000,
-        //serverSelectionTimeoutMS: 600000,
+        // serverSelectionTimeoutMS: 600000,
         useNewUrlParser: true,
         useUnifiedTopology: true,
         serverApi: ServerApiVersion.v1
       }, (err, mongoClient) => {
-        if(err){
+        if (err) {
           console.log('Error:mongo client connection err:', err)
           setTimeout(() => {
             console.log('recursive call to index()')
@@ -62,21 +62,20 @@ module.exports = (index) => {
         }
         const db = mongoClient.db(MONGODB_DATABASE)
         console.log('db:', db)
-        if(db){
+        if (db) {
           // Bridge homepage is README.md of the reader, rendered as HTML
           app.get(`/${bridge.id}`, (req, res) => {
             console.log('render ../doc/PROTOCOL.md')
             res.render('readme', {
-              markdown: require('fs')
-            .readFileSync(path.join(__dirname, '../doc/PROTOCOL.md')),
-            bridge
+              markdown: require('fs').readFileSync(path.join(__dirname, '../doc/PROTOCOL.md')),
+              bridge
             })
           })
           // Query frontend
           app.get(`/${bridge.id}/query`, (req, res) => {
             // Check if environment DEFAULT_QUERY is set, if so update normal defaults.query
             console.log('process.env.DEFAULT_QUERY:', process.env.DEFAULT_QUERY)
-            if(process.env.DEFAULT_QUERY) {
+            if (process.env.DEFAULT_QUERY) {
               defaults.query = eval(JSON.stringify(process.env.DEFAULT_QUERY, null, 2))
               console.log('defaults.query:eval(JSON(q))', defaults.query)
             }
@@ -84,7 +83,7 @@ module.exports = (index) => {
             res.render('query', { bridge, defaultQuery: defaults.query })
           })
           app.get(`/${bridge.id}/query/:qs`, (req, res) => {
-            res.render('query', { bridge, defaultQuery: defaults.query })    
+            res.render('query', { bridge, defaultQuery: defaults.query })
           })
           // Query backend
           app.get(`/${bridge.id}/q/:query`, (req, res) => {
@@ -96,7 +95,7 @@ module.exports = (index) => {
           app.get(`/${bridge.id}/socket`, (req, res) => {
             // Check if environment DEFAULT_SOCKET is set, if so update normal defaults.socket
             console.log('process.env.DEFAULT_SOCKET:', process.env.DEFAULT_SOCKET)
-            if(process.env.DEFAULT_SOCKET) {
+            if (process.env.DEFAULT_SOCKET) {
               defaults.socket = eval(JSON.stringify(process.env.DEFAULT_SOCKET, null, 2))
               console.log('defaults.socket:eval(JSON(s))', defaults.socket)
             }
@@ -108,7 +107,7 @@ module.exports = (index) => {
           })
           // Socket backend
           // *** this sould be socket *** ?
-          //app.get(`/${bridge.id}/s/:socket`, (req, res) => {
+          // app.get(`/${bridge.id}/s/:socket`, (req, res) => {
           app.get(`/${bridge.id}/s/:query`, (req, res) => {
             console.log(`${bridge.id} socket req:`, req)
             socket({ db, req, res })
@@ -118,19 +117,17 @@ module.exports = (index) => {
           app.listen(PORT, () => {
             console.log(`Bridge reader for ${bridge.id} listening on port ${PORT}`)
           })
-        }
-        else{
+        } else {
           console.log('Error:undefined db')
           setTimeout(() => {
             console.error('close mongoClient connection and recursive call to index()')
             mongoClient.close()
             index(index)
           }, 1000)
-          return
         }
       }
     )
-  } catch(err) {
+  } catch (err) {
     console.error('Error:catch:err:', err)
     setTimeout(() => {
       console.log('close mongoClient connection and recursive call to index()')
