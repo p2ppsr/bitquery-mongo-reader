@@ -1,5 +1,5 @@
 # bitquery-mongo-reader
-Improved UMP(User Management Protocol) reader, to be used as a reference work, for all future Bridge readers.
+Improved UMP(User Management Protocol) reader, to be used as a reference template, for all future Bridge readers.
 Please see doc/PROTOCOL.md for protocol description.
 
 The ```.env``` variables ```DEFAULT_QUERY``` and ```DEFAULT_SOCKET``` are used to specify the query strings a user starts with in their query and listening socket UI fields. These can be edited by the user, during the session, to create new queries or listening sockets.
