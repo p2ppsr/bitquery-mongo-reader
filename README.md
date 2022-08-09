@@ -9,7 +9,8 @@ Strings must be in strict full JSON format and follow [Bitquery](https://master-
 The other .env variables are for internal use.
 
 Links are presented on the protocol web page [localhost:3103/1H48C3wg1YcgpT7Tx61PHzH8Lx6v5tVUKL/] for displaying both the Query UI and Socket UI.
-nb: the trailing '/' character is required for the current implementation.
+
+nb: *the trailing '/' character is required for the current implementation*.
 
 ##Example ```.env``` file
 
