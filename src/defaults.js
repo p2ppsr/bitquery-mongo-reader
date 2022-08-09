@@ -2,10 +2,8 @@ module.exports = {
   query: JSON.stringify({
     v: 3,
     q: {
-      collection: 'users',
-      find: {},
-      //project: { _id: 1 },
-      //limit: 10
+      collection: 'data',
+      find: {}
     }
   }, null, 2),
   socket: JSON.stringify({

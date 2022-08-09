@@ -15,6 +15,8 @@ module.exports = ({ db, req, res }) => {
       })
     }
 
+    console.log('[query] <- ', parsedQuery)
+
     // Validate the query
     if (validateQuery(res, parsedQuery) !== 'success') {
       return
@@ -36,13 +38,18 @@ module.exports = ({ db, req, res }) => {
     if (req.headers.format === 'json') {
       return new Promise(resolve => {
         cursor.toArray().then(results => {
+          console.log('[query] -> ', results)
           res.status(200).json(results)
           resolve()
         })
       })
     } else {
       cursor.stream({
-        transform: result => JSON.stringify(result) + '\n'
+        transform: result => {
+          result = JSON.stringify(result)
+          console.log('[query] -> ', result)
+          return result + '\n'
+        }
       }).pipe(res)
     }
   } catch (e) {

@@ -13,6 +13,8 @@ module.exports = async ({ db, req, res }) => {
       })
     }
 
+    console.log('[socket] <- ', parsedQuery)
+
     // Validate the query
     if (validateQuery(res, parsedQuery, 'socket') !== 'success') {
       return
@@ -89,6 +91,7 @@ module.exports = async ({ db, req, res }) => {
       */
       event._id = event._bridgeport_original_id
       delete event._bridgeport_original_id
+      console.log('[socket] -> ', event)
       res.write(
         'data: ' +
         JSON.stringify({

@@ -33,21 +33,16 @@ module.exports = (index) => {
   // Initialise Mongo Client before call to connect to the MongoDB
   const mongoClient = null
   try {
-    console.log(`Bridge reader ${bridge.id} \nopening Mongo client:`,
-      '\nbuffer:', Buffer.from(MONGODB_READ_CREDS, 'base64').toString('utf8'),
-      '\n{serverSelectionTimeoutMS: 600000,',
-      'useNewUrlParser: true,',
-      'useUnifiedTopology: true,',
-      'serverApi: ServerApiVersion.v1}'
+    console.log(
+      `Bitquery Mongo Reader set up for bridge: ${bridge.id}\nOpening Mongo client with database connection string:`,
+      Buffer.from(MONGODB_READ_CREDS, 'base64').toString('utf8')
     )
     // Added serverSelectionTimeoutMS argument to give 10 minute timeout for Mongo connection call
     // Factored connect call to implement recursive Mongo connection call
     MongoClient.connect(
       Buffer.from(MONGODB_READ_CREDS, 'base64').toString('utf8'),
       {
-        // *** Testing ***: Set to 6 secs to demonstrate recusive conection call
-        serverSelectionTimeoutMS: 6000,
-        // serverSelectionTimeoutMS: 600000,
+        serverSelectionTimeoutMS: 600000,
         useNewUrlParser: true,
         useUnifiedTopology: true,
         serverApi: ServerApiVersion.v1
@@ -61,7 +56,7 @@ module.exports = (index) => {
           return
         }
         const db = mongoClient.db(MONGODB_DATABASE)
-        console.log('db:', db)
+        console.log('Successfully connected to database!')
         if (db) {
           // Bridge homepage is README.md of the reader, rendered as HTML
           app.get(`/${bridge.id}`, (req, res) => {
@@ -73,57 +68,44 @@ module.exports = (index) => {
           })
           // Query frontend
           app.get(`/${bridge.id}/query`, (req, res) => {
-            console.log(`frontend ${bridge.id}/query req:`, req)
-            // Check if environment DEFAULT_QUERY is set, if so update normal defaults.query
-            console.log('frontend process.env.DEFAULT_QUERY:', process.env.DEFAULT_QUERY)
             if (process.env.DEFAULT_QUERY) {
               defaults.query = eval(JSON.stringify(process.env.DEFAULT_QUERY, null, 2))
-              console.log('frontend defaults.query:eval(JSON(q))', defaults.query)
+              // console.log('frontend defaults.query:eval(JSON(q))', defaults.query)
             }
-            console.log('frontend defaults.query:', defaults.query)
-            console.log(`frontend ${bridge.id}/query res:`, res)
+            // console.log('frontend defaults.query:', defaults.query)
             res.render('query', { bridge, defaultQuery: defaults.query })
           })
           app.get(`/${bridge.id}/query/:qs`, (req, res) => {
-            console.log(`${bridge.id}/query/:qs req:`, req)
             res.render('query', { bridge, defaultQuery: defaults.query })
-            console.log(`${bridge.id}/query/:qs res:`, res)
           })
           // Query backend
           app.get(`/${bridge.id}/q/:query`, (req, res) => {
-            console.log(`backend ${bridge.id}/q/query req:`, req)
             query({ db, req, res })
-            console.log(`backend ${bridge.id}/q/query res:`, res)
           })
           // Socket frontend
           app.get(`/${bridge.id}/socket`, (req, res) => {
-            console.log(`frontend ${bridge.id}/socket req:`, req)
             // Check if environment DEFAULT_SOCKET is set, if so update normal defaults.socket
-            console.log('frontend process.env.DEFAULT_SOCKET:', process.env.DEFAULT_SOCKET)
+            // console.log('frontend process.env.DEFAULT_SOCKET:', process.env.DEFAULT_SOCKET)
             if (process.env.DEFAULT_SOCKET) {
               defaults.socket = eval(JSON.stringify(process.env.DEFAULT_SOCKET, null, 2))
-              console.log('defaults.socket:eval(JSON(s))', defaults.socket)
+              // console.log('defaults.socket:eval(JSON(s))', defaults.socket)
             }
-            console.log('defaults.socket:', defaults.socket)
-            console.log(`frontend ${bridge.id}/socket res:`, res)
+            // console.log('defaults.socket:', defaults.socket)
             res.render('socket', { bridge, defaultSocket: defaults.socket })
           })
           app.get(`/${bridge.id}/socket/:qs`, (req, res) => {
-            console.log(`frontend ${bridge.id}/socket:qs req:`, req)
             res.render('socket', { bridge, defaultSocket: defaults.socket })
-            console.log(`frontend ${bridge.id}/socket:qs res:`, res)
           })
           // Socket backend
-          // *** this sould be socket *** ?
           // app.get(`/${bridge.id}/s/:socket`, (req, res) => {
           app.get(`/${bridge.id}/s/:query`, (req, res) => {
-            console.log(`${bridge.id}/s/query socket req:`, req)
             socket({ db, req, res })
-            console.log(`${bridge.id}/s/query socket res:`, res)
           })
           // Listen
           app.listen(PORT, () => {
-            console.log(`Bridge reader for ${bridge.id} listening on port ${PORT}`)
+            console.log(
+              `Bridge reader for ${bridge.id} listening for connections`
+            )
           })
         } else {
           console.log('Error:undefined db')

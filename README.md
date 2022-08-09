@@ -1,24 +1,21 @@
 # bitquery-mongo-reader
-Improved UMP(User Management Protocol) reader, to be used as a reference template, for all future Bridge readers.
-Please see doc/PROTOCOL.md for protocol description.
 
-The ```.env``` variables ```DEFAULT_QUERY``` and ```DEFAULT_SOCKET``` are used to specify the query strings a user starts with in their query and listening socket UI fields. These can be edited by the user, during the session, to create new queries or listening sockets.
+This is a reader for use with bridges that utilizes Bitquery and MongoDB for document storage and retrieval. Reader protocol documentation can be configured with Docker volumes.
 
-Strings must be in strict full JSON format and follow [Bitquery](https://master--projectbabbage.netlify.app/docs/bridgeport/reference/bitquery) layout for query strings (see example below).
+The environmental variables ```DEFAULT_QUERY``` and ```DEFAULT_SOCKET``` are used to specify the query strings a user starts with in their query and listening socket UI fields. These can be edited by the user, during the session, to create new queries or listening sockets.
 
-The other ```.env``` variables are for internal use.
+Configuration of these variables, as well as the other variables required by all bridge readers (`BRIDGE`, `PORT`, etc.), can be accomplished within a `docker-compose.yml` file, or other means.
 
-Links are presented on the protocol web page [localhost:3103/1H48C3wg1YcgpT7Tx61PHzH8Lx6v5tVUKL/] for displaying both the Query UI and Socket UI.
+Bitqueries must be in strict full JSON format and follow the [Bitquery spec](https://master--projectbabbage.netlify.app/docs/bridgeport/reference/bitquery) (see example below).
 
-nb: *the trailing '/' character is required for the current implementation*.
+## Example Environment
 
-##Example ```.env``` file
+An example configuration utilizing the Bitquery Mongo Reader can be found in the [docker-compose.yml](docker-compose.yml). This example configuration is set up for the UMP bridge, proxied with Connecticut. In the example configuration, we mount an example documentation volume containing a copy of the UMP protocol document.
 
-```
-BRIDGE='eyJpZCI6IjFINDhDM3dnMVljZ3BUN1R4NjFQSHpIOEx4NnY1dFZVS0wifQ=='
-PORT=80
-MONGODB_READ_CREDS='bW9uZ29kYjovL2JyaWRnZXBvcnQtbW9uZ286MzExMy9icmlkZ2VfMUg0OEMzd2cxWWNncFQ3VHg2MVBIekg4THg2djV0VlVLTA=='
-MONGODB_DATABASE='bridge_1H48C3wg1YcgpT7Tx61PHzH8Lx6v5tVUKL'
-DEFAULT_QUERY='{"v": 3,"q": {"collection": "users", "find": {}}}'
-DEFAULT_SOCKET='{"v": 3,"q": {"collection": "users", "find": {}}}'
-```
+To spin up the example environment, use `docker compose up`.
+
+You can then access the running bridge reader [localhost:3103/1H48C3wg1YcgpT7Tx61PHzH8Lx6v5tVUKL](localhost:3103/1H48C3wg1YcgpT7Tx61PHzH8Lx6v5tVUKL) for displaying both the Query UI and Socket UI.
+
+## License
+
+The license for the code in this repository is the Open BSV License.
