@@ -1,10 +1,15 @@
 {
-  "main": "src/main.js",
+  "name": "bitquery-mongo-reader",
+  "version": "0.1.0",
+  "description": "Express app for reading Bridge data from a Mongo database",
+  "main": "src/index.js",
+  "license": "Open BSV License",
   "scripts": {
-    "start": "node src/main.js"
+    "lint": "standard --fix .",
+    "doc": "documentation readme --section=API src/index.js"
   },
-  "private": true,
   "devDependencies": {
+    "documentation": "^14.0.0",
     "nodemon": "^2.0.12",
     "standard": "^16.0.3"
   },
